@@ -1,0 +1,7 @@
+package spi.data.iterator;
+
+import spi.std;
+
+interface Iterator : Freeable {
+    val next: () -> Any*?;
+};

@@ -1,0 +1,46 @@
+package spi.string;
+
+import spi.memory;
+
+
+struct String {
+    u64 length; // Not including the trailing nul byte.
+    u8 *bytes;
+};
+
+// Eh dis nogal raar, hoe moet overloaden gaan werken met deze syntax..
+// overload keyword miss?
+
+
+overload val String_Copy := (str: String*, allocFunc: (size: u64) -> Any*?) -> String*?
+{
+    val membuf := allocFunc(sizeof(String) + str.length+1) :? return null;
+    val copy := (String*) membuf;
+    copy.bytes = (u8*) membuf + sizeof(String);
+    copy.length = str.length;
+    memcpy(copy.bytes, str.bytes, str.length + 1);
+    return copy;
+};
+
+overload val String_Copy := (str: String*) -> String*? { return String_Copy(str, malloc); };
+
+val String_Equals := (str1: String*?, str2: String*?) -> bool
+{
+    if(str1 == null && str2 != null || str2 == null && str1 != null)
+    {
+        return false;
+    }
+    else if(str1 == null && str2 == null)
+    {
+        return true;
+    }
+    else if(str1.length != str2.length)
+    {
+        return false;
+    }
+    else
+    {
+        for(var i = 0; i < str1.length; i++) if(str1.bytes[i] != str2.bytes[i]) return false;
+        return true;
+    }
+};

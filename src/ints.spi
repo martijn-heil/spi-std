@@ -1,0 +1,46 @@
+package spi.ints;
+
+import spi.string;
+
+val S8_MAX : s8;
+val S16_MAX : s16;
+val S32_MAX : s32;
+val S64_MAX : s64;
+
+val U8_MAX : u8;
+val U16_MAX : u16;
+val U32_MAX : u32;
+val U64_MAX : u64;
+
+val ParseU8 : (out: u8*, str: String*) -> bool;
+val ParseU16 : (out: u16*, str: String*) -> bool;
+val ParseU32 : (out: u32*, str: String*) -> bool;
+val ParseU64 : (out: u64*, str: String*) -> bool;
+
+val ParseS8 : (out: s8*, str: String*) -> bool;
+val ParseS16 : (out: s16*, str: String*) -> bool;
+val ParseS32 : (out: s32*, str: String*) -> bool;
+val ParseS64 : (out: s64*, str: String*) -> bool;
+
+val ParseF32 : (out: f32*, str: String*) -> bool;
+val ParseF64 : (out: f64*, str: String*) -> bool;
+
+val toString : bind (this: s8) -> String*?;
+val toString : bind (this: s16) -> String*?;
+val toString : bind (this: s32) -> String*?;
+val toString : bind (this: s64) -> String*?;
+
+val toString : bind (this: u8) -> String*?;
+val toString : bind (this: u16) -> String*?;
+val toString : bind (this: u32) -> String*?;
+val toString : bind (this: u64) -> String*?;
+
+val toString : bind (this: s8, base: u16) -> String*?;
+val toString : bind (this: s16, base: u16) -> String*?;
+val toString : bind (this: s32, base: u16) -> String*?;
+val toString : bind (this: s64, base: u16) -> String*?;
+
+val toString : bind (this: u8, base: u16) -> String*?;
+val toString : bind (this: u16, base: u16) -> String*?;
+val toString : bind (this: u32, base: u16) -> String*?;
+val toString : bind (this: u64, base: u16) -> String*?;

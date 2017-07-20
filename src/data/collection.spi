@@ -1,0 +1,14 @@
+package spi.data.collection;
+
+import spi.data.iterator;
+
+interface Collection {
+    val contains : (Any*) -> bool;
+    val isEmpty: () -> bool;
+    val iterator: () -> Iterator*?;
+};
+
+interface MutableCollection : Collection {
+    val add : (Any*) -> bool;
+    val remove : (Any*) -> bool;
+};

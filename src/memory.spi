@@ -1,0 +1,9 @@
+package spi.memory;
+
+var malloc : (size: u64) -> Any*?;
+var realloc : (ptr: Any*, newSize: u64) -> Any*?;
+var free : (ptr: Any*?);
+
+val memcpy : (out: Any*, in: Any*, size: u64);
+val memmove : (out: Any*, in: Any*, size: u64);
+val memset : (buf: Any*, with: u8, size: u64);

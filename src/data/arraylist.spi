@@ -1,0 +1,75 @@
+package spi.data.arraylist;
+
+import spi.memory;
+import spi.data.iterator;
+import spi.data.collection;
+
+
+struct ArrayList {
+    var size: u64;
+    var maxSize: u64;
+    var chunkSize: u64;
+    var contents: Any**;
+};
+
+overload val init := bind (this: ArrayList*, initialsize: u64, chunkSize: u64, list: Collection*?) -> bool {
+    this.size = 0;
+    this.maxSize = initialSize;
+    this.chunkSize = chunkSize;
+
+    this.contents = malloc(sizeof(Any*) * initialSize) :? { error; return false; }
+    if(list != null) {
+        val iter := list.iterator();
+        defer iter.free();
+        var next : Any*?;
+        do {
+            next = iter.next();
+            if(next != null) this.add(next);
+        } while(next != null);
+    }
+};
+
+overload val init := bind (this: ArrayList*) -> bool { return this.init(64, 32, null); };
+
+
+
+val add := bind (this: ArrayList*, entry: Any*) -> bool {
+    if(this.maxSize < arrayList.size + 1) this.contents = realloc(this.contents, this.maxSize + this.chunkSize) :? { error; return false; }
+
+    this.contents[arrayList.size] = entry;
+    this.size++;
+    return true;
+};
+
+val remove := bind (this: ArrayList*, entry: Any*) -> Any*? {
+    var entryFound : Any*? = null;
+    for(var i := 0; i < this.size; i++) {
+        if(this.contents[i] == entry) {
+            entryFound = this.contents[i];
+            memmove(this.contents + i, this.contents + i + 1, this.size - i+1);
+            this.size--;
+            if(this.size <= this.maxSize - this.chunkSize) {
+                this.contents = realloc(this.contents, this.maxSize - this.chunkSize) :? break;
+                this.maxSize -= this.chunkSize;
+            }
+            break;
+        }
+    }
+    return entryFound;
+};
+
+val contains := bind (this: ArrayList*, entry: Any*) -> bool {
+    for(var i := 0; i < this.size; i++) if(this.contents[i] == entry) return true;
+    return false;
+};
+
+val clear := bind (this: ArrayList*) {
+    this.size = 0;
+    this.contents = realloc(this.contents, this.chunkSize) :? { error; return; }
+};
+
+val wipe := bind (this: ArrayList*) {
+    memset(this.contents, 0, this.size);
+    this.size = 0;
+    this.contents = realloc(this.contents, this.chunkSize) :? { error; return; }
+};
